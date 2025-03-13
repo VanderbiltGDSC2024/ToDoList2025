@@ -1,8 +1,7 @@
 import express from "express";
 import { google } from "googleapis";
-import bodyParser from "body-parser";
 import cors from "cors";
-import creds from "./todolist-453515-cbbd2279141f.json" assert { type: "json" };
+// import creds from "./todolist-453515-cbbd2279141f.json" assert { type: "json" };
 
 const app = express();
 const PORT = 3001;
@@ -15,7 +14,7 @@ app.use(express.json());
 
 // Google Sheets API setup
 const auth = new google.auth.GoogleAuth({
-  credentials: creds,
+  // credentials: creds,
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
@@ -31,7 +30,6 @@ app.post("/add-task", async (req, res) => {
   if (!task) {
     return res.status(400).json({ error: "Task is required" });
   }
-  console.log("Received task:", task); // Add this to check the received task
 
   try {
     await sheets.spreadsheets.values.append({
@@ -66,9 +64,7 @@ app.get("/get-tasks", async (req, res) => {
 
 // Delete endpoint to delete a task from google sheets
 app.delete("/delete-task", async (req, res) => {
-  console.log("hi");
   const { task } = req.body;
-  console.log("task", task);
 
   if (!task) {
     return res.status(400).json({ error: "Task is required" });
